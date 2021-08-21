@@ -56,6 +56,7 @@ public class ChunkedFileUploadRemoteOperation extends UploadFileRemoteOperation 
 
     public static final long CHUNK_SIZE_MOBILE = 1024000;
     public static final long CHUNK_SIZE_WIFI = 10240000;
+    private static final int ASSEMBLE_MOVE_READTIMEOUT = 900000; //15 mins.
     private static final String OC_CHUNK_X_OC_MTIME_HEADER = "X-OC-Mtime";
     private static final String TAG = ChunkedFileUploadRemoteOperation.class.getSimpleName();
     private final boolean onWifiConnection;
@@ -181,7 +182,7 @@ public class ChunkedFileUploadRemoteOperation extends UploadFileRemoteOperation 
             if (token != null) {
                 moveMethod.addRequestHeader(E2E_TOKEN, token);
             }
-            int moveResult = client.executeMethod(moveMethod);
+            int moveResult = client.executeMethod(moveMethod,ASSEMBLE_MOVE_READTIMEOUT,-1);
 
             result = new RemoteOperationResult(isSuccess(moveResult), moveMethod);
         } catch (Exception e) {
